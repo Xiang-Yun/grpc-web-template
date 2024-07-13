@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package grpc_api;
+
+option go_package = "grpc-web-template/api_proto";
+
+import "google/protobuf/empty.proto";
+
+service APIService {
+    rpc ReadItem(ReadItemRequest) returns (MessageResponse) {}
+    rpc SendMessage(MessageRequest) returns (MessageResponse) {}
+    rpc DeleteItem(DeleteItemRequest) returns (MessageResponse) {}
+    rpc ShowClock(google.protobuf.Empty) returns (stream MessageResponse) {}
+}
+
+message MessageRequest {
+  string action = 1;
+  int64 userId = 2;
+  string message = 3;
+}
+
+message ReadItemRequest {
+    int64 id = 1;
+    string method = 2;
+  }
+
+  message DeleteItemRequest {
+    int64 id = 1;
+    string method = 2;
+  }
+  
+  message MessageResponse {
+    bool status = 1;
+    string data = 2;
+  }
+
+  

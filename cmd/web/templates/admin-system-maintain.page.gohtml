@@ -1,0 +1,40 @@
+{{template "admin" . }}
+
+{{define "title"}}
+    系統
+{{end}}
+
+{{define "css"}}
+
+{{end}}
+
+{{define "content"}}
+
+    {{$data := index .Data}}
+
+    <div class="d-flex">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="mb-4 mt-2">系統</h4>
+                
+                <p>
+                    <span>系統版本: </span>
+                    <span id="system-version" style="display: inline;">{{$data.version}}</span>
+                </p>
+
+                <p>
+                    <span>建置日期: </span>
+                    <span id="system-buildTime" style="display: inline;">{{$data.buildTime}}</span>
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+
+{{end}}
+
+
+{{define "js"}}
+
+{{end}}

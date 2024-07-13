@@ -1,0 +1,332 @@
+
+{{define "admin"}}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap-4.5.2.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+
+    <!-- admin Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/static/admin/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/static/admin/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/static/admin/images/favicon.png"/>
+    <!-- Latest compiled and minified CSS -->
+
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+
+    <style>
+
+        .content-wrapper{
+            background: white;
+        }
+        label{
+            font-weight: bold;
+        }
+        .notie-container{
+            z-index: 50000;
+        }
+
+        .container-scroller {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container-fluid {
+            padding: 0;
+        }
+
+        .sidebar {
+            margin: 0;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .range-container input[type="range"] {
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .text-output {
+            font-weight: bold;
+        }
+
+        .card {
+            height: 100%;
+            width: 200%;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .form-control {
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+
+        .pt-5 {
+            padding-top: 0rem !important;
+        }
+        
+    </style>
+
+    <title>
+      {{block "title" .}}
+      {{end}}
+    </title>
+
+    {{block "head" .}}
+    {{end}}
+
+    {{block "css" . }}
+    {{end}}
+    
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">&nbsp;</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">首頁</a>
+          </li>
+
+          {{if eq .IsAuthenticated 1}}
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/admin/system/maintain">管理員</a>
+          </li>
+
+          {{end}}
+
+        </ul>
+
+        {{if eq .IsAuthenticated 1}}
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li id="clock-link" class="nav-item">
+              <div class="nav-link" id="clock"></div></li>
+            </li>
+            <li id="login-link" class="nav-item">
+              <a class="nav-link" href="/logout">登出</a></li>
+            </li>
+          </ul>
+        {{else}}
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li id="clock-link" class="nav-item">
+               <div class="nav-link" id="clock"></div></li>
+            </li>
+            <li id="login-link" class="nav-item">
+              <a class="nav-link" href="/login">登入</a></li>
+            </li>
+          </ul>
+        {{end}}
+      </div>
+    </div>
+  </nav>
+
+    <!-- admin web component -->
+    <div class="container-scroller">
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-system" aria-expanded="false"
+                        aria-controls="ui-system">
+                            <i class="ti-shield menu-icon"></i>
+                            <span class="menu-title">系統</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-system">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="/admin/system/maintain">
+                                        系統維護</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/all-users">
+                            <i class="ti-user menu-icon"></i>
+                            <span class="menu-title">使用者</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">
+                            <i class="ti-bar-chart-alt menu-icon"></i>
+                            <span class="menu-title">儀錶板</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="font-weight-bold mb-0">
+                                        {{block "page-title" .}}
+                                        {{end}}
+                                    </h4>
+                                </div>
+
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {{block "content" .}}
+                        {{end}}
+                    </div>
+
+                    {{block "grpc" .}} 
+                    {{end}}
+
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                {{/* <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+
+                    </div>
+                </footer> */}}
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <!-- plugins:js -->
+    <script src="/static/admin/vendors/base/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="/static/admin/js/off-canvas.js"></script>
+    <script src="/static/admin/js/hoverable-collapse.js"></script>
+    <script src="/static/admin/js/jquery.cookie.js"></script>
+    
+    <script src="/static/admin/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    {{/* <script src="https://unpkg.com/notie"></script> */}}
+    <script src="/static/admin/js/dashboard.js"></script>
+    <script src="/static/admin/js/template.js"></script>
+    
+    <script src="https://unpkg.com/notie"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript" src="/static/js/bootstrap.bundle-4.5.2.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+      let socket;
+      document.addEventListener("DOMContentLoaded", function() {
+        socket = new WebSocket("ws://{{.Host}}/ws/endPoint");
+        socket.onopen = () => {}
+        socket.onclose = event => { };
+        socket.onerror = error => { };
+        socket.onmessage = msg => { 
+          let data = JSON.parse(msg.data);
+          switch (data.action) {
+            case "deleteUser":
+              if (data.user_id === {{.UserID}}) {
+                logout();
+              }
+              break;
+            case "logout":
+              logout();
+              break;
+            default:
+          }
+        }
+      })
+
+      // create grpc client
+      let token = localStorage.getItem("token");
+      NewClient("{{.ProxyAddr}}", token);
+      ShowClock();
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("token_expiry");
+        location.href = "/logout";
+      }
+  
+      function notify(msg, msgType) {
+        if(typeof msg === 'object' && msg.message !== undefined){
+          if(msg.message.includes("no authorization header received") ||
+             msg.message.includes("no matching user found")){
+            logout();
+          }
+        }
+
+        notie.alert({
+            type: msgType,
+            text: msg,
+        })
+      }
+
+      function notifyModal(title, text, icon, confirmationButtonText) {
+        Swal.fire({
+            title: title,
+            html: text,
+            icon: icon,
+            confirmButtonText: confirmationButtonText
+        })
+      }
+      
+      {{with .Error}}
+        notify("{{.}}", "error");
+      {{end}}
+
+      {{with .Flash}}
+        notify("{{.}}", "success");
+      {{end}}
+
+      {{with .Warning}}
+        notify("{{.}}", "warning");
+      {{end}}
+
+    </script>
+
+    {{block "js" .}}
+    {{end}}
+
+{{end}}

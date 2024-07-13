@@ -1,0 +1,88 @@
+{{template "admin" . }}
+
+{{define "title"}}
+    All Users
+{{end}}
+
+{{define "page-title"}}
+{{end}}
+
+
+{{define "content"}}
+  <div class="float-end">
+      <a class="btn btn-info btn-rounded btn-fw" href="/admin/all-users/0">新增</a>
+  </div>
+  <div>
+      <hr>
+      <div class="clearfix"></div>
+      <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+              <div class="card-body">
+                  <h4 class="card-title">All Admin Users</h4>
+                  {{/* <p class="card-description">
+                    Add class <code>.table-striped</code>
+                  </p> */}}
+                  <div class="table-responsive">
+                      <table id="user-table" class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th>使用者</th>
+                                  <th>更新時間</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{{end}}
+
+
+{{define "js"}}
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        let tbody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+        let token = localStorage.getItem("token");
+
+        const requestOptions = {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+        }
+
+        fetch("{{.Backend}}/api/admin/all-users", requestOptions)
+        .then(response => response.json())
+        .then(function (data) {        
+            data = data.data
+            if (data) {
+                data.forEach(function(i) {
+                    let newRow = tbody.insertRow();
+                    let newCell = newRow.insertCell();
+
+                    newCell.innerHTML = `<a href="/admin/all-users/${i.id}">${i.user}</a>`;
+
+                    newCell = newRow.insertCell();
+                    let item = document.createTextNode(i.updatedAt);
+                    newCell.appendChild(item);
+                });
+            } else {
+                let newRow = tbody.insertRow();
+                let newCell = tbody.insertCell();
+                newCell.setAttribute("colspan", "2");
+                newCell.innerHTML = "no data available";
+            }
+        }).catch((err) => {
+            notify(err, "error");
+        })
+    })
+
+    </script>
+
+{{end}}
